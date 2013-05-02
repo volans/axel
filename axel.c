@@ -48,8 +48,8 @@ axel_t *axel_new( conf_t *conf, int count, void *url )
 	axel->conn = malloc( sizeof( conn_t ) * axel->conf->num_connections );
 	memset( axel->conn, 0, sizeof( conn_t ) * axel->conf->num_connections );
 
-    strncpy( axel->conn->user, axel->conf->http_user, MAX_STRING );
-    strncpy( axel->conn->pass, axel->conf->http_pass, MAX_STRING );
+	strncpy( axel->conn->user, axel->conf->http_user, MAX_STRING );
+	strncpy( axel->conn->pass, axel->conf->http_pass, MAX_STRING );
 
 	if( axel->conf->max_speed > 0 )
 	{

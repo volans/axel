@@ -27,6 +27,25 @@
 
 char string[MAX_STRING];
 
+int base64_encode(const unsigned char *data, int length, char *dest)
+{
+	char base64_table[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+		"abcdefghijklmnopqrstuvwxyz0123456789+/";
+    int i;
+
+	for( i = 0; data[i*3]; i ++ )
+	{
+		dest[i*4] = base64_table[(data[i*3]>>2)];
+		dest[i*4+1] = base64_table[((data[i*3]&3)<<4)|(data[i*3+1]>>4)];
+		dest[i*4+2] = base64_table[((data[i*3+1]&15)<<2)|(data[i*3+2]>>6)];
+		dest[i*4+3] = base64_table[data[i*3+2]&63];
+		if( data[i*3+2] == 0 ) dest[i*4+3] = '=';
+		if( data[i*3+1] == 0 ) dest[i*4+2] = '=';
+	}
+
+    return 0;
+}
+
 /* Convert an URL to a conn_t structure					*/
 int conn_set( conn_t *conn, char *set_url )
 {
@@ -102,10 +121,13 @@ int conn_set( conn_t *conn, char *set_url )
 			strcpy( conn->user, "anonymous" );
 			strcpy( conn->pass, "mailto:axel-devel@lists.alioth.debian.org" );
 		}
+#if 0
+/* marsked after added http-user and password */
 		else
 		{
 			*conn->user = *conn->pass = 0;
 		}
+#endif
 	}
 	
 	/* Password?							*/
@@ -260,6 +282,23 @@ int conn_setup( conn_t *conn )
 		http_addheader( conn->http, "User-Agent: %s", conn->conf->user_agent );
 		for( i = 0; i < conn->conf->add_header_count; i++)
 			http_addheader( conn->http, "%s", conn->conf->add_header[i] );
+    
+        if( *conn->conf->http_proxy != 0 )
+        {
+            if( (*conn->conf->proxy_user != 0) && (*conn->conf->proxy_password != 0) )
+            {
+                char auth[MAX_STRING];
+                char auth_64[MAX_STRING];
+
+                memset( auth, 0, MAX_STRING );
+                memset( auth_64, 0, MAX_STRING );
+                snprintf( auth, MAX_STRING, "%s:%s", conn->conf->proxy_user, conn->conf->proxy_password );
+                base64_encode( auth, strlen(auth), auth_64 );
+                
+                http_addheader( conn->http, "Proxy-Authorization: Basic %s", auth_64 );
+            
+            }
+        }
 	}
 	return( 1 );
 }

@@ -27,7 +27,11 @@ typedef struct
 {
 	char default_filename[MAX_STRING];
 	char http_proxy[MAX_STRING];
+	char proxy_user[MAX_STRING];
+	char proxy_password[MAX_STRING];
 	char no_proxy[MAX_STRING];
+    char http_user[MAX_STRING];
+    char http_pass[MAX_STRING];
 	int strip_cgi_parameters;
 	int save_state_interval;
 	int connection_timeout;

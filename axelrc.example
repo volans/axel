@@ -43,8 +43,16 @@
 # I haven't tried it myself, so I would love to hear from you about the
 # results.
 #
-# http_proxy = 
+# http_proxy =
+# proxy_user =
+# proxy_password =
 # no_proxy = 
+
+# User-Agent
+# default set to "Axel VERSION (ARCH)"
+#
+# user_agent = "xxxxx 2.4 xxxx"
+#
 
 # Keep CGI arguments in the local filename?
 #

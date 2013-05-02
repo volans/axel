@@ -79,6 +79,8 @@ int conf_loadfile( conf_t *conf, char *file )
 		/* Long live macros!!					*/
 		get_config_string( default_filename );
 		get_config_string( http_proxy );
+		get_config_string( proxy_user );
+		get_config_string( proxy_password );
 		get_config_string( no_proxy );
 		get_config_number( strip_cgi_parameters );
 		get_config_number( save_state_interval );
@@ -94,6 +96,7 @@ int conf_loadfile( conf_t *conf, char *file )
 		get_config_number( search_threads );
 		get_config_number( search_amount );
 		get_config_number( search_top );
+		get_config_string( user_agent );
 		
 		/* Option defunct but shouldn't be an error		*/
 		if( strcmp( key, "speed_type" ) == 0 )
@@ -127,6 +130,8 @@ int conf_init( conf_t *conf )
 	strcpy( conf->default_filename, "default" );
 	*conf->http_proxy		= 0;
 	*conf->no_proxy			= 0;
+	*conf->proxy_user		= 0;
+	*conf->proxy_password   = 0;
 	conf->strip_cgi_parameters	= 1;
 	conf->save_state_interval	= 10;
 	conf->connection_timeout	= 45;

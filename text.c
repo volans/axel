@@ -54,6 +54,8 @@ static struct option axel_options[] =
 	{ "alternate",		0,	NULL,	'a' },
 	{ "header",		1,	NULL,	'H' },
 	{ "user-agent",		1,	NULL,	'U' },
+	{ "http-user",  1,  NULL,   'u' },
+    { "http-pass",  1,  NULL,   'p' },
 	{ NULL,			0,	NULL,	0 }
 };
 #endif
@@ -90,7 +92,7 @@ int main( int argc, char *argv[] )
 	{
 		int option;
 		
-		option = getopt_long( argc, argv, "s:n:o:S::NqvhVaH:U:", axel_options, NULL );
+		option = getopt_long( argc, argv, "s:n:o:S::NqvhVaH:U:u:p:", axel_options, NULL );
 		if( option == -1 )
 			break;
 		
@@ -102,6 +104,12 @@ int main( int argc, char *argv[] )
 		case 'H':
 			strncpy( conf->add_header[cur_head++], optarg, MAX_STRING );
 			break;
+		case 'u':
+            strncpy( conf->http_user, optarg, MAX_STRING );
+            break;
+        case 'p':
+            strncpy( conf->http_pass, optarg, MAX_STRING );
+            break;
 		case 's':
 			if( !sscanf( optarg, "%i", &conf->max_speed ) )
 			{
@@ -545,6 +553,8 @@ void print_help()
 		"-S [x]\tSearch for mirrors and download from x servers\n"
 		"-H x\tAdd header string\n"
 		"-U x\tSet user agent\n"
+		"-u s\tSpecify http user\n"
+        "-p s\tSpecify http password\n"
 		"-N\tJust don't use any proxy server\n"
 		"-q\tLeave stdout alone\n"
 		"-v\tMore status information\n"
@@ -562,6 +572,8 @@ void print_help()
 		"--search[=x]\t\t-S [x]\tSearch for mirrors and download from x servers\n"
 		"--header=x\t\t-H x\tAdd header string\n"
 		"--user-agent=x\t\t-U x\tSet user agent\n"
+        "--http-user=s\t\t-u s\tSpecify http user\n"
+        "--http-pass=s\t\t-p s\tSpecify http password\n"
 		"--no-proxy\t\t-N\tJust don't use any proxy server\n"
 		"--quiet\t\t\t-q\tLeave stdout alone\n"
 		"--verbose\t\t-v\tMore status information\n"
